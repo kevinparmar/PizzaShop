@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="my-4">
+    <form asp-action="Index" class="row row-cols-lg-auto g-3 align-items-center">
+
+        <div class="col-12">
+            <label class="visually-hidden" for="searchTerm">Search</label>
+            <div class="input-group">
+                <div class="input-group-text"></div>
+                <input type="text" class="form-control" value="" id="searchTerm" name="searchTerm" placeholder="Search">
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="" class="btn btn-dark">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div class="w-100 mt-4 d-flex flex-wrap justify-content-evenly">
+    @foreach (var pizza in Model.Pizzas)
+    {
+        <div class="card my-3" style="width: 16rem;">
+            <img src="/css/images/sample-pizza.png" class="card-img-top" alt="Pizza">
+            <div class="card-body">
+                <h5 class="card-title">@pizza.Name</h5>
+                <p class="card-text">@pizza.Description</p>
+                <div class="d-flex align-items-baseline justify-content-between">
+                    <span id="totalPrice">@pizza.Price.ToString("C")</span>
+                    <a href="#" class="btn btn-primary" onclick="add(@pizza.Id)">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        async function add(pizzaId) {
+            var usernameEl = document.getElementById("username");
+            if (usernameEl == null) {
+                window.location.href = "/Identity/Account/Login";
+                return; // Added return to exit the function
+            }
+
+            try {
+                var response = await fetch(`/Cart/AddItem?pizzaId=${pizzaId}`);
+                if (response.status == 200) {
+                    var result = await response.json();
+                    var cartCountEl = document.getElementById("cartCount");
+                    cartCountEl.innerHTML = result;
+                    window.location.href = "#cartCount";
+                    console.log("Logged In");
+                }
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    </script>
+}

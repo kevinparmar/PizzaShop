@@ -14,28 +14,46 @@
         </div>
 
         <div class="col-12">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="" class="btn btn-dark">Reset</a>
+            <button id="Search_Button" type="submit" class="btn btn-primary">Search</button>
+            <a id="Reset_Link" href="" class="btn btn-dark">Reset</a>
         </div>
     </form>
 </div>
 
-<div class="w-100 mt-4 d-flex flex-wrap justify-content-evenly">
-    @foreach (var pizza in Model.Pizzas)
+<div id="Pizza_Container" class="w-100 mt-4 d-flex flex-wrap justify-content-evenly">
+    @if (Model.Count == 0)
     {
-        <div class="card my-3" style="width: 16rem;">
-            <img src="/css/images/sample-pizza.png" class="card-img-top" alt="Pizza">
-            <div class="card-body">
-                <h5 class="card-title">@pizza.Name</h5>
-                <p class="card-text">@pizza.Description</p>
-                <div class="d-flex align-items-baseline justify-content-between">
-                    <span id="totalPrice">@pizza.Price.ToString("C")</span>
-                    <a href="#" class="btn btn-primary" onclick="add(@pizza.Id)">Add to cart</a>
+        <div id="No_Pizza_Found" class="text-center fs-4 fw-bold">No pizza found</div>
+    }
+    else
+    {
+        @foreach (var pizza in Model)
+        {
+            <div id="Pizza_Card" class="card my-3" style="width: 16rem;">
+                @if (string.IsNullOrEmpty(pizza.Image))
+                {
+                    <div class="d-flex p-2 justify-content-center">
+                        <img src="/css/images/sample-pizza.png" alt="Default" style="width:200px;height:200px" />
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center p-2">
+                        <img src="/css/images/@pizza.Image" alt="Pizza" style="width:200px;height:200px" />
+                    </div>
+                }
+                <div class="card-body">
+                    <h5 id="Pizza_Name" class="card-title">@pizza.Name</h5>
+                    <p id="Pizza_Description" class="card-text">@pizza.Description</p>
+                    <div class="d-flex align-items-baseline justify-content-between">
+                        <span id="totalPrice">@pizza.Price.ToString("C")</span>
+                        <a id="AddToCart" href="#" class="btn btn-primary" onclick="add(@pizza.Id)">Add to cart</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
-</div>
+</div>  
 
 @section Scripts {
     <script>

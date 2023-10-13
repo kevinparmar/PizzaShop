@@ -32,17 +32,6 @@ namespace PizzaShop.Repository
             return orders;
         }
 
-        public async Task<List<OrderDetail>> GetOrderDetails(int orderId)
-        {
-            var orderDetails = await _db.OrderDetails
-                .Where(od => od.OrderId == orderId)
-                .Include(od => od.Pizza) // Include related Pizza information if needed
-                .ToListAsync();
-
-            return orderDetails;
-        }
-
-
         public string GetUserId()
         {
             var principal = _httpContextAccessor.HttpContext.User;

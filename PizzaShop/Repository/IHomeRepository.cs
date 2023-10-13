@@ -6,6 +6,5 @@ namespace PizzaShop.Repository
     {
         Task<IEnumerable<Pizza>> GetPizzas();
         Task<IEnumerable<Pizza>> GetPizzasBySearch(string searchTerm);
-        Task<IEnumerable<Topping>> GetAvailableToppings();
     }
 }

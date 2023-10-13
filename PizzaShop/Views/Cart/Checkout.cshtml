@@ -1,0 +1,48 @@
+﻿@model ShoppingCart
+
+<div class="container mt-5">
+    <h2>Order Items</h2>
+
+    <table id="Order_Details" class="table table-bordered">
+        <thead id="Order_Table_Header">
+            <tr class="text-center">
+                <th scope="col">Image</th>
+                <th scope="col">Item</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+            </tr>
+        </thead>
+        <tbody id="Order_Table_Body">
+            @foreach (var item in Model.CartDetails)
+            {
+                <tr class="text-center align-middle">
+                    <td>
+                    @if (string.IsNullOrEmpty(item.Pizza.Image))
+                    {
+                        <img src="/css/images/sample-pizza.png" alt="Default" style="width:100px;height:100px" />
+                    }
+                    else
+                    {
+                        <img src="~/css/images/@item.Pizza.Image" alt="Pizza" style="width:100px;height:100px" />
+                    }
+                    </td>
+                    <td>@item.Pizza.Name</td>
+                    <td>@item.Pizza.Price.ToString("C2")</td>
+                    <td>@item.Quantity</td>
+                    <td>@((item.UnitPrice * item.Quantity).ToString("C2"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <h4>Total: @Model.CartDetails.Sum(item => item.UnitPrice * item.Quantity).ToString("C2")</h4>
+        <a id="Confirm_Button" asp-action="ConfirmOrder" class="btn btn-success">Confirm Order</a>
+    </div>
+    <br />
+    <br />
+    <div class="d-flex justify-content-center">
+        <a id="Back_Button" asp-action="Index" class="btn btn-danger">Back</a>
+    </div>
+</div>

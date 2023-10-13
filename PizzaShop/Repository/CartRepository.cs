@@ -106,6 +106,36 @@ namespace PizzaShop.Repository
 
         // Add methods for removing items, getting the cart, and checking out similar to your existing repository     
 
+        public async Task<int> RemoveAllItemsFromCart()
+        {
+            string userId = GetUserId();
+            try
+            {
+                if (string.IsNullOrEmpty(userId))
+                    throw new Exception("User is not logged in");
+
+                var cart = await GetCart(userId);
+                if (cart is null)
+                    throw new Exception("Invalid Cart");
+
+                var cartItems = _db.CartDetails
+                    .Where(cd => cd.ShoppingCartId == cart.Id);
+
+                if (cartItems.Any())
+                {
+                    _db.CartDetails.RemoveRange(cartItems);
+                    _db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions, e.g., logging or returning false
+            }
+
+            var cartItemCount = await GetCartItemCount(userId);
+            return cartItemCount;
+        }
+
         public async Task<int> GetCartItemCount(string userId = "")
         {
             if (string.IsNullOrEmpty(userId))
@@ -146,7 +176,7 @@ namespace PizzaShop.Repository
             return userId;
         }
 
-        public async Task<int> DoCheckout()
+        public async Task<bool> ConfirmOrder()
         {
             using var transaction = _db.Database.BeginTransaction();
             try
@@ -191,13 +221,12 @@ namespace PizzaShop.Repository
                 _db.SaveChanges();
                 transaction.Commit();
                 //return orderDetail;
-                return order.Id;
+                return true;
             }
             catch (Exception ex)
             {
-                throw (ex);
+                return false;
             }
         }
-
     }
 }

@@ -39,11 +39,11 @@
                         {
                         <tr class ="table-light">
                             <td>
-                                    @if (string.IsNullOrEmpty(item.Pizza.Image))
-                                    {<img src="/css/images/sample-pizza.png" alt="Default" style="width:100px;height:100px" />}
-                                    else
+                                @if (string.IsNullOrEmpty(item.Pizza.Image))
+                                {<img src="/css/images/sample-pizza.png" alt="Default" style="width:100px;height:100px" />}
+                                else
                                 {
-                                    <img src="/css/images/@item.Pizza.Image" alt="Pizza"  style="width:100px;height:100px" />
+                                    <img src="~/css/images/@item.Pizza.Image" alt="Pizza"  style="width:100px;height:100px" />
                                 }
                                 </td>
                                 <td>@item.Pizza.Name</td>

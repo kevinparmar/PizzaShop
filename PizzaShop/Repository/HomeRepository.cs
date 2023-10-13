@@ -24,10 +24,5 @@ namespace PizzaShop.Repository
                 .Where(pizza => pizza.Name.Contains(searchTerm) || pizza.Description.Contains(searchTerm))
                 .ToListAsync();
         }
-        public async Task<IEnumerable<Topping>> GetAvailableToppings()
-        {
-            return await _db.Toppings.ToListAsync();
-        }
-
     }
 }

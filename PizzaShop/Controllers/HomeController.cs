@@ -22,15 +22,7 @@ namespace PizzaShop.Controllers
                         ? await _homeRepository.GetPizzas()
                         : await _homeRepository.GetPizzasBySearch(searchTerm);
 
-            var toppings = await _homeRepository.GetAvailableToppings();
-
-            var pizzaDisplayModel = new PizzaDisplayModel
-            {
-                Pizzas = pizzas,
-                Toppings = toppings
-            };
-
-            return View(pizzaDisplayModel);
+            return View(pizzas);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -33,6 +33,13 @@ namespace PizzaShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> ClearCart()
+        {
+            var count = await _cartRepository.RemoveAllItemsFromCart();
+            Console.Out.WriteLine("Cart Count in RemoveAll method: ", count);
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> GetUserCart()
         {
             var cart = await _cartRepository.GetUserCart();
@@ -48,13 +55,18 @@ namespace PizzaShop.Controllers
 
         public async Task<IActionResult> Checkout()
         {
-            int orderId = await _cartRepository.DoCheckout();
-
-            TempData["Message"] = "Order placed successfully.";
-            TempData["OrderId"] = orderId; // Store order details in TempData
-
-            return RedirectToAction("OrderConfirmation","Order"); // Redirect to the new "OrderConfirmation" view
+            var cart = await _cartRepository.GetUserCart();
+            return View(cart);
         }
 
+        public async Task<IActionResult> ConfirmOrder()
+        {
+            bool confirmOrder = await _cartRepository.ConfirmOrder();
+            if (!confirmOrder)
+            {
+                Console.Out.WriteLine("Order Not Confirmed");
+            }
+            return View();
+        }
     }
 }
